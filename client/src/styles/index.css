@@ -1,0 +1,49 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: SourceSansPro;
+}
+@font-face {
+	font-family: SourceSansPro;
+	src: url("../fonts/SourceSansPro-Regular.otf");
+	font-style: normal;
+	font-weight: normal;
+}
+input, .formupload__file {
+	font-family: SourceSansPro;
+	font-size: 14px;
+	color: #000033;
+	border: 1px solid gray;
+	border-radius: 6px;
+	padding: 4px 8px;
+}
+input[type=button], .formupload__file {
+    background-color: #39C2D7;
+    cursor: pointer;
+}
+input[type=button]:hover, .formupload__file:hover {
+    background-color: #1A9CB0;
+}
+input[type=button]:disabled {
+    background-color: #39C2D7;
+	opacity: 0.6;
+	cursor: auto;
+}
+input:focus {
+    outline: none;
+}
+input[type=button].delete, input[type=button].replay {
+	padding: 0px 2px;
+	margin: 4px;
+}
+input[type=range] {
+	padding: 4px 0px;
+}
+input:checked[type=checkbox i] {
+	background-color: #B22746;
+    -webkit-appearance: button;
+    padding: 5px;
+	vertical-align: sub;
+    border-radius: 2px;
+	margin-right: 4px;
+}

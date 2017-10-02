@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Snake</title>
+		<link rel="stylesheet" href="./snake.css">
+	</head>
+
+	<body>
+		<form id="snakes" action="/api/snakes" method="post">
+			<input type="submit" value="Update Snakes List" name="submit">
+			<br>
+			<span id="status"></span>
+		</form>
+		<ul id="checkboxes"></ul>
+		<a href="./_Player01.js">Example Bot (class)</a>
+		<br>
+		<a href="./_Player02.js">Example Bot (prototype)</a>
+		<script src="./jquery.min.js"></script>
+		<script src="./jquery.form.min.js"></script>
+		<script>
+			$(document).ready(function () {
+				$('#snakes').submit(function () {
+					$("#status").empty().text("List is getting...");
+					$("#checkboxes").empty();
+					$(this).ajaxSubmit({
+						error: function (xhr) {
+							console.log('Error: ' + xhr.status);
+							$("#status").empty().text('Error: ' + xhr.status);
+						},
+						success: function (response) {
+							console.log(response);
+							$("#status").empty();
+							eval("(" + response + ")").snakes.split`,`.forEach(_ => {
+								let __ = _.substring(0, _.lastIndexOf(".js"));
+								let checkbox = $(`<li><label><input type="checkbox" name="${_}" value="${_}"/>${__}</label>
+					<input class="delete" type="button" name="${_}" value="delete"/></li>`);
+								$("#checkboxes").append(checkbox);
+							});
+						}
+					});
+					return false;
+				});
+				$(document).on('click', '.delete', function (e) {
+					let name = this.name;
+					if (!name.startsWith("_")) {
+						$.post("/api/delete", {name: name.substring(0, name.lastIndexOf(".js"))})
+								.done(function (data) {
+									if (data === "OK") {
+										location.reload();
+									}
+								});
+					} else {
+						alert("Forbidden!");
+					}
+				});
+			});
+		</script>
+	</body>
+</html>

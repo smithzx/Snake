@@ -1,0 +1,11 @@
+{
+  "name": "file_upload",
+  "version": "0.0.1",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.13.3",
+    "fs": "0.0.1-security",
+    "lodash": "^4.17.4",
+    "multer": "^1.1.0"
+  }
+}

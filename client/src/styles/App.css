@@ -1,0 +1,114 @@
+.app {
+	text-align: center;
+}
+.app__logo {
+	height: 80px;
+}
+.app__header {
+	background-image: url(../images/tver2.jpg);
+	background-position: 50% 100%;
+	background-size: cover;
+	height: 155px;
+	padding: 20px;
+	color: white;
+}
+.mainpage {
+	display: grid;
+    grid-template-columns: 320px 3fr 4fr;
+    grid-template-rows: 80px 80px 1fr 80px 215px;
+}
+.formupload {
+    grid-column: 1;
+    grid-row: 1;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-content: space-around;
+	margin: 10px;
+}
+.formupload__name {	
+    margin-left: -4px;
+    padding-right: 4px;
+}
+.formupload__status {
+	flex-basis: 100%;
+}
+.example {
+    grid-column: 1;
+    grid-row: 2;
+}
+.snakeslist {
+    grid-column: 1;
+    grid-row: 3;
+}
+.startgame {
+    grid-column: 1;
+    grid-row: 4;
+}
+.snakeslist__checkboxes {	
+    border: 2px #666666 solid;
+    border-radius: 12px;
+	list-style-type: none;
+    padding: 10px;
+	margin: 10px;
+	text-align: right;
+}
+.replayslist {
+    grid-column: 1;
+    grid-row: 5;
+	overflow-y: scroll;
+}
+.snakeslist label,.replayslist label {
+    float: left;
+}
+.replayslist__list {
+	list-style-type: none;
+	font-size: 12px;
+    border: 2px #666666 solid;
+    border-radius: 12px;
+	list-style-type: none;
+    padding: 10px;
+	margin: 10px;
+	text-align: right;
+}
+.battlefield {
+    grid-column: 2;
+    grid-row: 1;
+	margin-top: 10px;
+}
+.battlefield__cell::before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+}
+.info {
+    grid-column: 3;
+    grid-row: 1;
+	border: 2px #666666 solid;
+    height: 300%;
+	margin: 10px;
+	display: flex;
+	text-align: left;
+	background-color: #39C2D7;
+	font-size: 24px;
+    line-height: 24px;
+}
+.info__table td {
+	padding: 0 4px;
+}
+.info__result { 
+	flex-grow: 1;
+	padding-left: 4px;
+	text-align: center;
+}
+.results {
+    grid-column: 3;
+    grid-row: 3;
+	margin: 100px 10px 10px 10px;
+	display: grid;
+	width: 0;
+	height: 0;
+}
+.results__reset {
+	margin-bottom: 6px;
+}
