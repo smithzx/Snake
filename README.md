@@ -11,4 +11,4 @@ cd client
 npm start
 localhost:3000
 
-https://github.com/facebookincubator/create-react-app/issues/2519#issuecomment-318867289"# Snake" 
+https://github.com/facebookincubator/create-react-app/issues/2519#issuecomment-318867289
