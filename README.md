@@ -7,8 +7,11 @@ npm update
 node api
 localhost:3001
 
+npm install -g create-react-app
 create-react-app client
 cd client
+copy files from client folder and fix package.json
+npm update
 npm start
 localhost:3000
 ```
