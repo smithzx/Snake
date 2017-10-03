@@ -120,7 +120,7 @@ export default class Battlefield extends React.PureComponent {
 					this.game.steps.push({p: i, x: step && step.x, y: step && step.y, t: 1000000});
 					let head = this.snakes[i][this.snakes[i].length - 1];
 					throw {
-						message: "#" + i + " " + this.props.players[i] + "/" + this.getColor(i) + " lose!\n"
+						message: "#" + i + " " + this.props.players[i] + " (" + this.getColor(i) + ") lose!\n"
 								+ " head: " + (head ? "(" + head.x + ", " + head.y + ")" : " empty") + " >>"
 								+ " step: " + (step ? "(" + step.x + ", " + step.y + ")" : " empty")
 					};
@@ -148,7 +148,7 @@ export default class Battlefield extends React.PureComponent {
 					times[i] = newTime;
 					if (newTime > this.timelimit) {
 						throw {
-							message: "#" + i + " " + this.props.players[i] + "|" + this.getColor(i) + " lose!\nTime: "
+							message: "#" + i + " " + this.props.players[i] + " (" + this.getColor(i) + ") lose!\nTime: "
 									+ newTime.toFixed(3) + " > time limit: " + this.timelimit
 						};
 					}
@@ -189,7 +189,7 @@ export default class Battlefield extends React.PureComponent {
 			if (!step || step.t === 1000000) {
 				let head = this.snakes[step.p][this.snakes[step.p].length - 1];
 				throw {
-					message: "#" + step.p + " " + game.players[step.p] + "/" + game.colors[step.p] + " lose!\n"
+					message: "#" + step.p + " " + game.players[step.p] + " (" + game.colors[step.p] + ") lose!\n"
 							+ " head: " + (head ? "(" + head.x + ", " + head.y + ")" : " empty") + " >>"
 							+ " step: " + (step && step.x ? "(" + step.x + ", " + step.y + ")" : " empty")
 				};
@@ -198,7 +198,7 @@ export default class Battlefield extends React.PureComponent {
 			} else if (!this.checkStep(step.p, step)) {
 				let head = this.snakes[step.p][this.snakes[step.p].length - 1];
 				throw {
-					message: "#" + step.p + " " + game.players[step.p] + "/" + game.colors[step.p] + " lose!\n"
+					message: "#" + step.p + " " + game.players[step.p] + " (" + game.colors[step.p] + ") lose!\n"
 							+ " head: " + (head ? "(" + head.x + ", " + head.y + ")" : " empty") + " >>"
 							+ " step: " + (step ? "(" + step.x + ", " + step.y + ")" : " empty")
 				};

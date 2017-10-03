@@ -5,3 +5,5 @@ export { default as Player2top } from "./Player2top";
 export { default as _Player01 } from "./_Player01";
 export { default as _Player02 } from "./_Player02";
 export { default as _PlayerBlack } from "./_PlayerBlack";
+export { default as Ъжсло } from "./Ъжсло";
+export { default as Abcdefghijklmnopqrstuvwxyz } from "./Abcdefghijklmnopqrstuvwxyz";
