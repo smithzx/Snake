@@ -5,6 +5,7 @@ const iconvlite = require('iconv-lite');
 const lodash = require('lodash');
 const bodyParser = require('body-parser');
 const app = express();
+
 const storage = multer.diskStorage({
 	destination: function (req, file, callback) {
 		callback(null, './client/src/snakes/');
@@ -31,6 +32,16 @@ function fileExists(filename) {
 		return true;
 	} catch (e) {
 		return false;
+	}
+}
+
+function mkdirSync(dirPath) {
+	try {
+		fs.mkdirSync(dirPath);
+	} catch (err) {
+		if (err.code !== 'EEXIST') {
+			throw err;
+		}
 	}
 }
 
@@ -109,6 +120,7 @@ app.post('/api/save', function (req, res) {
 	date.setMonth(0);
 	date.setDate(1);
 	let players = req.body.players.map(_ => _.substring(0, 2)).join(".");
+	mkdirSync('./public/games');
 	fs.writeFile('./public/games/game' + date.getTime() + "_" + players + '.json', JSON.stringify(req.body), (err) => {
 		if (err) {
 			return console.log(err);
