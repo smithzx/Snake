@@ -47,7 +47,7 @@ export default class MainPage extends React.PureComponent {
 				let newResults = results.concat([resultWinner[0], resultLooser[0]]);
 				localStorage.setItem("results", JSON.stringify(newResults));
 				return {results: newResults};
-			}
+		}
 		});
 	}
 
@@ -71,14 +71,13 @@ export default class MainPage extends React.PureComponent {
 		this.refs.battlefield.stop(typeof (event) === "string" ? event : "stopped by button click");
 	}
 
-	selectPlayer(event) {
-		let selected = event.nativeEvent.target.value;
+	selectPlayer(name) {
 		this.setState(({players: oldPlayers}) => {
 			let players = [...oldPlayers];
-			if (players.includes(selected)) {
-				players.splice(players.indexOf(selected), 1);
+			if (players.includes(name)) {
+				players.splice(players.indexOf(name), 1);
 			} else {
-				players.push(selected);
+				players.push(name);
 			}
 			return {players};
 		});

@@ -13,10 +13,14 @@ export default class SnakesList extends React.PureComponent {
 				.then(result => this.setState({snakes: result.snakes}));
 	}
 
+	selectPlayer(e) {
+		this.props.selectPlayer(e.target.value);
+	}
+
 	deleteSnake(name) {
 		if (!name.startsWith("_")) {
 			if (this.props.players.includes(name)) {
-				this.props.selectPlayer({nativeEvent: {target: {value: name}}});
+				this.props.selectPlayer(name);
 			}
 			fetch('/api/delete', {
 				method: 'post',
@@ -37,7 +41,7 @@ export default class SnakesList extends React.PureComponent {
 							this.state.snakes.split`,`.map(_ => _.substring(0, _.lastIndexOf(".js"))).map((_, i) =>
 								<li key={i}><label>
 										<input type="checkbox" name={_} value={_} disabled={this.props.disabled}
-											   onChange={this.props.selectPlayer} checked={this.props.players.includes(_)}/>{_}</label>
+											   onChange={this.selectPlayer.bind(this)} checked={this.props.players.includes(_)}/>{_}</label>
 									<input className="delete" type="button" name={_} value="delete" 
 										   disabled={this.props.disabled} onClick={this.deleteSnake.bind(this, _)}/></li>)
 						}
