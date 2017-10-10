@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default class Player10 {
 
 	constructor(i) {
@@ -67,7 +69,7 @@ class FieldChecker {
 		}
 		for (let i = 0; i < this.size; i++) {
 			for (let j = 0; j < this.size; j++) {
-				let cell = this.field.filter(_ => _.x === i && _.y === j)[0];
+				let cell = _.find(this.field, cell => cell.x === i && cell.y === j);
 				cell.weight = this.result[cell.num];
 			}
 		}
@@ -86,7 +88,7 @@ class FieldChecker {
 		if (y >= this.size) {
 			y -= this.size;
 		}
-		let cell = this.field.filter(_ => _.x === x && _.y === y)[0];
+		let cell = _.find(this.field, cell => cell.x === x && cell.y === y);
 		if (cell.t > -1) {
 			cell.num = 0;
 			return false;
