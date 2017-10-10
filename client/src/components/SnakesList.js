@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 export default class SnakesList extends React.PureComponent {
 	state = {snakes: ""}
@@ -17,8 +18,8 @@ export default class SnakesList extends React.PureComponent {
 		this.props.selectPlayer(e.target.value);
 	}
 
-	deleteSnake(name) {
-		if (!name.startsWith("_")) {
+	deleteSnake(name, admin) {
+		if (!name.startsWith("_") || admin) {
 			if (this.props.players.includes(name)) {
 				this.props.selectPlayer(name);
 			}
@@ -42,8 +43,19 @@ export default class SnakesList extends React.PureComponent {
 								<li key={i}><label>
 										<input type="checkbox" name={_} value={_} disabled={this.props.disabled}
 											   onChange={this.selectPlayer.bind(this)} checked={this.props.players.includes(_)}/>{_}</label>
-									<input className="delete" type="button" name={_} value="delete" 
-										   disabled={this.props.disabled} onClick={this.deleteSnake.bind(this, _)}/></li>)
+									<Router>
+										<Switch>
+											<Route exact path='/' render={ () => 												
+												<input className="delete" type="button" name={_} value="delete" 
+													   disabled={this.props.disabled} onClick={this.deleteSnake.bind(this, _)}/>
+											}/>
+											<Route path='/admin' render={ () => 
+												<input className="delete" type="button" name={_} value="DELETE" 
+													   disabled={this.props.disabled} onClick={this.deleteSnake.bind(this, _, true)}/>
+											}/>
+										</Switch>
+									</Router>
+								</li>)
 						}
 					</ul>				
 				</div>

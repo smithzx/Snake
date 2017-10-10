@@ -48,7 +48,7 @@ export default class MainPage extends React.PureComponent {
 				let newResults = results.concat([resultWinner[0], resultLooser[0]]);
 				window.localStorage && localStorage.setItem("results", JSON.stringify(newResults));
 				return {results: newResults};
-			}
+		}
 		});
 	}
 
