@@ -18,25 +18,20 @@ export default class Battlefield extends React.PureComponent {
 
 	type = {FREE: -1, FOOD: -2};
 
-	componentDidUpdate() {
-	}
-
-	shuffleArray(array) {
-		for (var i = array.length - 1; i > 0; i--) {
-			var j = Math.floor(Math.random() * (i + 1));
-			[array[i], array[j]] = [array[j], array[i]];
+	componentWillReceiveProps(nextProps) {
+		if ((nextProps.inplay && !this.state.inplay) || this.props.replay !== nextProps.replay) {
+			this.start(nextProps.players, nextProps.replay);
 		}
-		return array;
 	}
 
-	start(replay) {
+	start(players, replay) {
 		console.log("start");
 		this.field = [];
 		this.players = [];
 		this.snakes = [];
 		this.game = {replay: replay};
 		this.props.stopGame("when started");
-		this.lengths = new Array(this.props.players.length + 1).join(this.length).split("").map(_ => Number(_));
+		this.lengths = new Array(players.length + 1).join(this.length).split("").map(_ => Number(_));
 		for (let i = 0; i < this.size * this.size; i++) {
 			let x = i % this.size;
 			let y = Math.floor(i / this.size);
@@ -44,17 +39,16 @@ export default class Battlefield extends React.PureComponent {
 			this.getCell(x, y).setState({player: this.type.FREE});
 		}
 		this.props.setInfo("", "", false, "#39C2D7");
-		if (this.props.players.length > 0) {
-			if (!replay) {
-				const players = this.props.players.filter(player => Players[player]);
-				this.shuffleArray(players);
+		if (players.length > 0) {
+			if (!Object.keys(replay).length) {
+				const filteredPlayers = players.filter(player => Players[player]);
 				this.game.heads = [];
 				this.game.colors = [];
 				this.game.steps = [];
-				for (let i = 0; i < players.length; i++) {
+				for (let i = 0; i < filteredPlayers.length; i++) {
 					this.players.push({
-						name: players[i],
-						clazz: new Players[players[i]](i)
+						name: filteredPlayers[i],
+						clazz: new Players[filteredPlayers[i]](i)
 					});
 					this.snakes.push([]);
 					this.game.colors.push(this.getColor(i));
@@ -65,23 +59,25 @@ export default class Battlefield extends React.PureComponent {
 			} else {
 				console.log("replay");
 				this.game.heads = [];
-				for (let i = 0; i < this.props.players.length; i++) {
+				for (let i = 0; i < players.length; i++) {
 					this.players.push({
-						name: this.props.players[i]
+						name: players[i]
 					});
 					this.snakes.push([]);
 					this.addHead(replay.heads[i].p, replay.heads[i]);
 				}
 				this.stepId = 0;
-				this.intervalId = setInterval(this.replayGame.bind(this, replay), this.props.speed / this.props.players.length);
+				this.intervalId = setInterval(this.replayGame.bind(this, replay), this.props.speed / players.length);
 			}
+			this.setState({inplay: true});
 		}
 	}
 
 	stop(ex) {
+		this.setState({inplay: false});
 		console.log("stop", ex);
 		clearInterval(this.intervalId);
-		if (ex !== "when started" && Object.keys(this.game).length > 1 && !this.game.replay) {
+		if (ex !== "when started" && Object.keys(this.game).length > 1 && !Object.keys(this.game.replay).length) {
 			this.game.result = ex;
 			fetch('/api/save', {
 				method: 'post',
@@ -337,7 +333,7 @@ export default class Battlefield extends React.PureComponent {
 	getColor(i) {
 		return (this.players[i] && this.players[i].clazz && this.players[i].clazz.getColor)
 				? this.players[i].clazz.getColor()
-				: this.game.replay
+				: this.game.replay && this.game.replay.colors
 				? this.game.replay.colors[i]
 				: this.colors[i % this.colors.length];
 	}
@@ -349,6 +345,7 @@ export default class Battlefield extends React.PureComponent {
 		this.state = {
 			players: this.props.players,
 			count: this.props.players.length,
+			inplay: false
 		};
 		this.intervalId;
 		this.getColor = this.getColor.bind(this);

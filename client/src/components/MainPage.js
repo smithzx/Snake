@@ -19,7 +19,8 @@ export default class MainPage extends React.PureComponent {
 			info: [],
 			text2: "",
 			color: "#39C2D7",
-			speed: 950
+			speed: 950,
+			replay: {}
 		};
 
 		this.addResult = this.addResult.bind(this);
@@ -51,24 +52,32 @@ export default class MainPage extends React.PureComponent {
 		});
 	}
 
+	shuffleArray(array) {
+		for (var i = array.length - 1; i > 0; i--) {
+			var j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+		return array;
+	}
+
 	startGame() {
 		if (this.state.players.length > 0) {
-			this.setState({inplay: true});
-			this.refs.battlefield.start();
+			this.setState(({players}) => {
+				return {players: this.shuffleArray(players), inplay: true, replay: {}};
+			});
 		}
 	}
 
 	replayGame(replay) {
 		let game = JSON.parse(replay);
-		this.setState({players: game.players, inplay: true});
-		this.refs.battlefield.start(game);
+		this.setState({players: game.players, inplay: true, replay: game});
 	}
 
 	stopGame(event) {
 		if (event !== "when started") {
 			this.setState({inplay: false});
 		}
-		this.refs.battlefield.stop(typeof (event) === "string" ? event : "stopped by button click");
+		this.refs.battlefield.stop(event.message || (typeof (event) === "string" ? event : "stopped by button click"));
 	}
 
 	selectPlayer(name) {
@@ -110,7 +119,7 @@ export default class MainPage extends React.PureComponent {
 					<ReplaysList replayGame={this.replayGame}/>
 					<Battlefield className="battlefield" ref="battlefield" addResult={this.addResult} setInfo={this.setInfo}
 								 players={this.state.players} speed={1000 - this.state.speed} replay={this.state.replay}
-								 stopGame={this.stopGame}/>
+								 stopGame={this.stopGame} inplay={this.state.inplay}/>
 					<Results results={this.state.results}/>
 					<Info info={this.state.info} text2={this.state.text2} color={this.state.color} />
 				</div>
