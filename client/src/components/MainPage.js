@@ -15,7 +15,7 @@ export default class MainPage extends React.PureComponent {
 		super(props);
 		this.state = {
 			players: [],
-			results: JSON.parse(localStorage.getItem("results")) || [],
+			results: window.localStorage && JSON.parse(localStorage.getItem("results")) || [],
 			info: [],
 			text2: "",
 			color: "#39C2D7",
@@ -39,15 +39,15 @@ export default class MainPage extends React.PureComponent {
 				let newResultWinner = {name1: winnerName, name2: looserName, value: 1};
 				let newResultLooser = {name1: looserName, name2: winnerName, value: -1};
 				let newResults = results.concat([newResultWinner, newResultLooser]);
-				localStorage.setItem("results", JSON.stringify(newResults));
+				window.localStorage && localStorage.setItem("results", JSON.stringify(newResults));
 				return {results: newResults};
 			} else {
 				resultWinner[0].value++;
 				resultLooser[0].value--;
 				let newResults = results.concat([resultWinner[0], resultLooser[0]]);
-				localStorage.setItem("results", JSON.stringify(newResults));
+				window.localStorage && localStorage.setItem("results", JSON.stringify(newResults));
 				return {results: newResults};
-		}
+			}
 		});
 	}
 

@@ -12,7 +12,8 @@ export default class Battlefield extends React.PureComponent {
 	speed = 50;
 	timelimit = 100000000;
 	length = 8;//must be < 10
-	colors = ["red", "green", "blue", "cyan", "magenta", "yellow", "lime", "purple", "brown"];
+	colors = ["salmon", "yellowgreen", "cornflowerblue", "orange", "lightseagreen", "violet",
+		"brown", "cyan", "magenta", "yellow", "red", "green", "blue", "lime", "purple"];
 	game = {};
 
 	type = {FREE: -1, FOOD: -2};
