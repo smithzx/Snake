@@ -36,7 +36,7 @@ export default class ResultsCell extends React.PureComponent {
 				: (this.props.count > this.props.size * this.props.size)
 				? _.sumBy(_.filter(this.props.results, {
 					name1: this.props.players[this.props.count - this.props.size * this.props.size - 1]
-				}).filter(result => this.props.players.includes[result.name2]), "value")
+				}).filter(result => this.props.players.includes(result.name2)), "value")
 				: (this.props.count % (this.props.size + 1) === 0)
 				? "X"
 				: _.filter(this.props.results, {
