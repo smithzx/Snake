@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require('multer');
-const fs = require('fs');
+const fs = require('fs-extra');
 const iconvlite = require('iconv-lite');
 const lodash = require('lodash');
 const bodyParser = require('body-parser');
@@ -140,6 +140,16 @@ app.post('/api/replays', function (req, res) {
 app.post('/api/replay', function (req, res) {
 	const uploaded = readFileSync_encoding('./public/games/' + req.body.name + ".json", "utf-8");
 	return res.send({replay: uploaded});
+});
+app.post('/api/backup', function (req, res) {
+	fs.copy('./backup', './client/src/snakes', function (err) {
+		if (err) {
+			res.status(400);
+			console.log(err);
+			return res.end("Error restoring backup file." + JSON.stringify(err));
+		}
+		return res.send("Backup restored!");
+	});
 });
 app.listen(3001, function () {
 	console.log("Working on port 3001");

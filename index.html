@@ -7,15 +7,16 @@
 	</head>
 
 	<body>
+		<h1>Admin panel</h1>
 		<form id="snakes" action="/api/snakes" method="post">
 			<input type="submit" value="Update Snakes List" name="submit">
 			<br>
 			<span id="status"></span>
 		</form>
 		<ul id="checkboxes"></ul>
-		<a href="./_Player01.js">Example Bot (class)</a>
-		<br>
-		<a href="./_Player02.js">Example Bot (prototype)</a>
+		<form id="backup" action="/api/backup" method="post">
+			<input type="submit" value="Restore default" name="submit">
+		</form>
 		<script src="./jquery.min.js"></script>
 		<script src="./jquery.form.min.js"></script>
 		<script>
@@ -41,18 +42,29 @@
 					});
 					return false;
 				});
+				$('#backup').submit(function () {
+					$("#checkboxes").empty();
+					$("#status").empty().text("Backup restoring...");
+					$(this).ajaxSubmit({
+						error: function (xhr) {
+							console.log('Error: ' + xhr.status);
+							$("#status").empty().text('Error: ' + xhr.status);
+						},
+						success: function (response) {
+							console.log(response);
+							$("#status").empty().text(response);
+						}
+					});
+					return false;
+				});
 				$(document).on('click', '.delete', function (e) {
 					let name = this.name;
-					if (!name.startsWith("_")) {
-						$.post("/api/delete", {name: name.substring(0, name.lastIndexOf(".js"))})
-								.done(function (data) {
-									if (data === "OK") {
-										location.reload();
-									}
-								});
-					} else {
-						alert("Forbidden!");
-					}
+					$.post("/api/delete", {name: name.substring(0, name.lastIndexOf(".js"))})
+							.done(function (data) {
+								if (data === "OK") {
+									location.reload();
+								}
+							});
 				});
 			});
 		</script>
