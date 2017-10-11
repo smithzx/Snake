@@ -48,7 +48,7 @@ export default class MainPage extends React.PureComponent {
 				let newResults = results.concat([resultWinner[0], resultLooser[0]]);
 				window.localStorage && localStorage.setItem("results", JSON.stringify(newResults));
 				return {results: newResults};
-		}
+			}
 		});
 	}
 
@@ -73,11 +73,11 @@ export default class MainPage extends React.PureComponent {
 		this.setState({players: game.players, inplay: true, replay: game});
 	}
 
-	stopGame(event) {
-		if (event !== "when started") {
+	stopGame(result) {
+		if (result !== "when started") {
 			this.setState({inplay: false});
 		}
-		this.refs.battlefield.stop(event.message || (typeof (event) === "string" ? event : "stopped by button click"));
+		this.refs.battlefield.stop(typeof result === "string" ? result : "stopped by button click");
 	}
 
 	selectPlayer(name) {

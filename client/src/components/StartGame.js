@@ -5,7 +5,7 @@ export default function StartGame({speed, disabled, changeSpeed, startGame, stop
 	return (
 			<div className="startgame">
 				<span style={{verticalAlign: "super"}}>Speed:</span>
-				<input type="range" className="speed" min="0" max="1000" value={speed} onChange={changeSpeed} disabled={disabled}/>
+				<input type="range" className="speed" min="0" max="1000" value={speed} onChange={changeSpeed}/>
 				<br/>
 				<input type="button" className="start" value="Start Game" onClick={startGame} disabled={disabled}/>
 				&nbsp;

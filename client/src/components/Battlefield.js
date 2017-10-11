@@ -55,7 +55,14 @@ export default class Battlefield extends React.PureComponent {
 					this.addHead(i);
 				}
 				this.game.players = this.players.map(player => player.name);
-				this.intervalId = setInterval(this.makeSteps.bind(this), this.props.speed);
+				function periodicall() {
+					this.makeSteps.call(this);
+					if (this.timeoutId !== -1) {
+						this.timeoutId = setTimeout(periodicall.bind(this), this.props.speed);
+					}
+				};
+				this.timeoutId = 0;
+				periodicall.call(this);
 			} else {
 				console.log("replay");
 				this.game.heads = [];
@@ -67,7 +74,14 @@ export default class Battlefield extends React.PureComponent {
 					this.addHead(replay.heads[i].p, replay.heads[i]);
 				}
 				this.stepId = 0;
-				this.intervalId = setInterval(this.replayGame.bind(this, replay), this.props.speed / players.length);
+				function periodicall() {
+					this.replayGame.call(this, replay);
+					if (this.timeoutId !== -1) {
+						this.timeoutId = setTimeout(periodicall.bind(this), this.props.speed / players.length);
+					}
+				};
+				this.timeoutId = 0;
+				periodicall.call(this);
 			}
 			this.setState({inplay: true});
 		}
@@ -76,7 +90,7 @@ export default class Battlefield extends React.PureComponent {
 	stop(ex) {
 		this.setState({inplay: false});
 		console.log("stop", ex);
-		clearInterval(this.intervalId);
+		clearTimeout(this.timeoutId);
 		if (ex !== "when started" && Object.keys(this.game).length > 1 && !Object.keys(this.game.replay).length) {
 			this.game.result = ex;
 			fetch('/api/save', {
@@ -143,25 +157,28 @@ export default class Battlefield extends React.PureComponent {
 					oldHead.setState({player: i, head: false});
 					let newTime = performance.now() - time;
 					times[i] = newTime;
+					this.game.steps.push({p: i, x: step.x, y: step.y, t: newTime.toFixed(3)});
 					if (newTime > this.timelimit) {
 						throw {
 							message: "#" + i + " " + this.props.players[i] + " (" + this.getColor(i) + ") lose!\nTime: "
 									+ newTime.toFixed(3) + " > time limit: " + this.timelimit
 						};
 					}
-					this.game.steps.push({p: i, x: step.x, y: step.y, t: newTime.toFixed(3)});
 				}
 			} catch (ex) {
-				this.props.stopGame(ex);
-				this.intervalId = null;
+				this.timeoutId = -1;
+				let result = "";
 				if (this.players.length === 2) {
 					let winnerName = this.players[1 - i]
 					let looserName = this.players[i]
-					this.props.setInfo("", ex.message + "\n\n winner: " + winnerName.name, true, this.getColor(i));
+					result = ex.message + "\n\n winner: " + winnerName.name;
+					this.props.setInfo("", result, true, this.getColor(i));
 					this.props.addResult(winnerName.name, looserName.name);
 				} else {
-					this.props.setInfo("", ex.message, true, this.getColor(i));
+					result = ex.message;
+					this.props.setInfo("", result, true, this.getColor(i));
 				}
+				this.props.stopGame(result);
 			}
 		}
 //		this.printField(steps);
@@ -174,7 +191,7 @@ export default class Battlefield extends React.PureComponent {
 				color: this.getColor(i)
 			});
 		}
-		if (this.intervalId) {
+		if (this.timeoutId !== -1) {
 			this.props.setInfo(info, "");
 		}
 	}
@@ -183,7 +200,11 @@ export default class Battlefield extends React.PureComponent {
 		let steps = [];
 		let step = game.steps[this.stepId];
 		try {
-			if (!step || step.t === 1000000) {
+			if (!step) {
+				throw {
+					message: "stopped by button click"
+				};
+			} else if (step.t === 1000000) {
 				let head = this.snakes[step.p][this.snakes[step.p].length - 1];
 				throw {
 					message: "#" + step.p + " " + game.players[step.p] + " (" + game.colors[step.p] + ") lose!\n"
@@ -221,16 +242,8 @@ export default class Battlefield extends React.PureComponent {
 				oldHead.setState({player: step.p, head: false});
 			}
 		} catch (ex) {
-			this.props.stopGame(ex);
-			this.intervalId = null;
-			if (game.players.length === 2) {
-				let winnerName = game.players[1 - step.p]
-				let looserName = game.players[step.p]
-				this.props.setInfo("", ex.message + "\n\n winner: " + winnerName, true, game.colors[step.p]);
-				//this.props.addResult(winnerName, looserName);
-			} else {
-				this.props.setInfo("", ex.message, true, game.colors[step.p]);
-			}
+			this.props.stopGame(ex.message);
+			this.timeoutId = -1;
 		}
 		let info = [];
 		for (let i = 0; i < game.players.length; i++) {
@@ -241,12 +254,13 @@ export default class Battlefield extends React.PureComponent {
 				color: game.colors[i]
 			});
 		}
-		if (this.intervalId) {
-			this.props.setInfo(info, "");
-		}
 		this.stepId++;
 		if (this.stepId === game.steps.length) {
+			this.timeoutId = -1;
+			this.props.setInfo("", game.result, true, game.colors[step.p]);
 			this.props.stopGame("replay ended");
+		} else {
+			this.props.setInfo(info, "");
 		}
 	}
 
@@ -347,7 +361,7 @@ export default class Battlefield extends React.PureComponent {
 			count: this.props.players.length,
 			inplay: false
 		};
-		this.intervalId;
+		this.timeoutId;
 		this.getColor = this.getColor.bind(this);
 		this.stop = this.stop.bind(this);
 	}

@@ -38,7 +38,7 @@ export default class Player10 {
 				}
 			}
 		}
-		this.pausecomp(1);
+		this.pausecomp(93);
 		return cells[selectedCell];
 	}
 
