@@ -16,6 +16,12 @@ export default class ResultsCell extends React.PureComponent {
 					? "#A3C644"
 					: (this.props.count - 1 < this.props.players.length || this.props.count % this.props.size === 0)
 					? "#39C2D7"
+					: (this.props.count % (this.props.size + 1) === 0) || (this.props.count > this.props.size * this.props.size)
+					? "white"
+					: this.props.count === this.props.hover
+						|| this.props.count === this.props.hover + (this.props.size - 1) * (this.props.hover % (this.props.size + 1))
+						|| this.props.hover === this.props.count + (this.props.size - 1) * (this.props.count % (this.props.size + 1))
+					? "#CCCCCC"
 					: "white",
 			borderTop: this.props.count < this.props.size ? "2px #666666 solid" : "none",
 			borderRight: this.props.count % this.props.size === this.props.size - 1 ? "2px #666666 solid" : "1px #999999 solid",
@@ -49,8 +55,17 @@ export default class ResultsCell extends React.PureComponent {
 				})).value
 				: "-";
 	}
+	
+	mouseOver() {
+		this.props.highlight(this.props.count);
+	}
+
+	mouseOut() {
+		this.props.highlight(this.props.count, true);
+	}
 
 	render() {
-		return (<div className="resultcell"style={this.getStyles()}>{this.getValue()}</div>);
+		return (<div className="resultcell" style={this.getStyles()}
+				onMouseOver={this.mouseOver.bind(this)} onMouseOut={this.mouseOut.bind(this)}>{this.getValue()}</div>);
 	}
 };
