@@ -6,3 +6,4 @@ export { default as _Player01 } from "./_Player01";
 export { default as _Player02 } from "./_Player02";
 export { default as _PlayerBlack } from "./_PlayerBlack";
 export { default as _PlayerGold } from "./_PlayerGold";
+export { default as Mover } from "./Mover";
