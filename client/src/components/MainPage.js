@@ -124,7 +124,7 @@ export default class MainPage extends React.PureComponent {
 	onFieldClick(e) {
 		if (e.nativeEvent.which === 1) {//left
 			this.setState(({weight}) => {
-				let newWeight = Math.min(4, weight + 0.1);
+				let newWeight = Math.min(6, weight + 0.1);
 				window.localStorage && localStorage.setItem("weight", newWeight);
 				return ({weight: newWeight})
 			});
