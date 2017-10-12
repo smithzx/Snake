@@ -22,15 +22,15 @@ export default class MainPage extends React.PureComponent {
 		};
 	}
 
-	onClick() {
-		this.setState(({collapsed}) => ({collapsed: !collapsed}));
-	}
-
 	getLogoStyles() {
 		return {
 			height: this.state.collapsed ? "0" : "80px",			
 			transition: "height 1s"
 		};
+	}
+
+	onClick() {
+		this.setState(({collapsed}) => ({collapsed: !collapsed}));
 	}
 
 	render() {
