@@ -376,7 +376,10 @@ export default class Battlefield extends React.PureComponent {
 
 	render() {
 		return (
-				<div className="battlefield" style={this.getStyles()}>
+				<div className="battlefield"
+					style={this.getStyles()} 
+					onClick={this.props.onFieldClick}
+					onContextMenu={this.props.onFieldClick}>
 					{_.times(this.size * this.size).map(tile => (
 										<BattlefieldCell key={tile}
 														 count={tile}

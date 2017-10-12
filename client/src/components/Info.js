@@ -1,10 +1,18 @@
 import React from 'react';
 import _ from 'lodash';
 
-export default function Info( {info, text2, color}) {
+export default function Info( {info, text2, color, fontSize, onIncrement, onDecrement}) {
+
+	const onContextMenu = e => {
+		e.preventDefault();
+		onDecrement();
+	};
 
 	return (
-			<div className="info">
+			<div className="info"
+				 onClick={onIncrement}
+				 onContextMenu={onContextMenu}
+				 style={{fontSize: fontSize + "px", lineHeight: fontSize + "px"}}>
 				<table className="info__table">
 					<tbody>
 						{info.map((line, i) => <tr key={i}>
@@ -30,5 +38,5 @@ export default function Info( {info, text2, color}) {
 					{text2.split`\n`.map((line, i) => <span key={i}>{line}<br/></span>)}
 				</div>
 			</div>
-				);
-	};
+								);
+					};

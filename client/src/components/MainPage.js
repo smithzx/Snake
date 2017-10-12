@@ -20,7 +20,9 @@ export default class MainPage extends React.PureComponent {
 			text2: "",
 			color: "#39C2D7",
 			speed: 950,
-			replay: {}
+			replay: {},
+			fontSize: 24,
+			weight: window.localStorage && parseFloat(localStorage.getItem("weight")) || 3
 		};
 
 		this.addResult = this.addResult.bind(this);
@@ -30,6 +32,9 @@ export default class MainPage extends React.PureComponent {
 		this.selectPlayer = this.selectPlayer.bind(this);
 		this.changeSpeed = this.changeSpeed.bind(this);
 		this.setInfo = this.setInfo.bind(this);
+		this.onIncrement = this.onIncrement.bind(this);
+		this.onDecrement = this.onDecrement.bind(this);
+		this.onFieldClick = this.onFieldClick.bind(this);
 	}
 
 	addResult(winnerName, looserName) {
@@ -108,20 +113,46 @@ export default class MainPage extends React.PureComponent {
 		}
 	}
 
+	onIncrement() {
+		this.setState(({fontSize}) => ({fontSize: Math.min(40, fontSize + 1)}));
+	}
+	
+	onDecrement() {
+		this.setState(({fontSize}) => ({fontSize: Math.max(12, fontSize - 1)}));
+	}
+
+	onFieldClick(e) {
+		if (e.nativeEvent.which === 1) {//left
+			this.setState(({weight}) => {
+				let newWeight = Math.min(4, weight + 0.1);
+				window.localStorage && localStorage.setItem("weight", newWeight);
+				return ({weight: newWeight})
+			});
+		} else if (e.nativeEvent.which === 3) {//right
+			e.preventDefault();
+			this.setState(({weight}) => {
+				let newWeight = Math.max(2, weight - 0.1);
+				window.localStorage && localStorage.setItem("weight", newWeight);
+				return ({weight: newWeight})
+			});
+		}
+	}
+
 	render() {
 		return (
-				<div className="mainpage">
+				<div className="mainpage" style={{gridTemplateColumns: "320px " + this.state.weight + "fr 4fr"}}>
 					<FormUpload/>
 					<Example/>
 					<SnakesList players={this.state.players} selectPlayer={this.selectPlayer} disabled={this.state.inplay}/>
 					<StartGame speed={this.state.speed} disabled={this.state.inplay}
 							   changeSpeed={this.changeSpeed} startGame={this.startGame} stopGame={this.stopGame}/>
 					<ReplaysList replayGame={this.replayGame}/>
-					<Battlefield className="battlefield" ref="battlefield" addResult={this.addResult} setInfo={this.setInfo}
+					<Battlefield ref="battlefield" addResult={this.addResult} setInfo={this.setInfo}
 								 players={this.state.players} speed={1000 - this.state.speed} replay={this.state.replay}
-								 stopGame={this.stopGame} inplay={this.state.inplay}/>
+								 stopGame={this.stopGame} inplay={this.state.inplay} onFieldClick={this.onFieldClick}/>
 					<Results results={this.state.results}/>
-					<Info info={this.state.info} text2={this.state.text2} color={this.state.color} />
+					<Info info={this.state.info} text2={this.state.text2} color={this.state.color}
+						  fontSize={this.state.fontSize} onIncrement={this.onIncrement} onDecrement={this.onDecrement}/>
 				</div>
 				);
 	}
