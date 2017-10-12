@@ -45,13 +45,13 @@ export default class SnakesList extends React.PureComponent {
 											   onChange={this.selectPlayer.bind(this)} checked={this.props.players.includes(_)}/>{_}</label>
 									<Router>
 										<Switch>
-											<Route exact path='/' render={ () => 												
-												<input className="delete" type="button" name={_} value="delete" 
-													   disabled={this.props.disabled} onClick={this.deleteSnake.bind(this, _)}/>
-											}/>
 											<Route path='/admin' render={ () => 
 												<input className="delete" type="button" name={_} value="DELETE" 
 													   disabled={this.props.disabled} onClick={this.deleteSnake.bind(this, _, true)}/>
+											}/>
+											<Route path='*' render={ () => 												
+												<input className="delete" type="button" name={_} value="delete" 
+													   disabled={this.props.disabled} onClick={this.deleteSnake.bind(this, _)}/>
 											}/>
 										</Switch>
 									</Router>
