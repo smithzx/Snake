@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
-import logo from './EPAM_LOGO_White_type_RGB.png';
+import React from 'react';
 import MainPage from './components/MainPage';
+import Header from './components/Header';
 import './styles/App.css';
 
-class App extends Component {
-	state = {users: []}
+class App extends React.PureComponent {
+
+	state = {users: []};
 
 	render() {
 		return (
 				<div className="app">
-					<div className="app__header">
-						<img src={logo} className="app__logo" alt="logo" />
-					</div>
+					<Header/>
 					<MainPage/>
 				</div>
 				);

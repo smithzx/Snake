@@ -1,17 +1,6 @@
 .app {
 	text-align: center;
 }
-.app__logo {
-	height: 80px;
-}
-.app__header {
-	background-image: url(../images/tver2.jpg);
-	background-position: 50% 100%;
-	background-size: cover;
-	height: 155px;
-	padding: 20px;
-	color: white;
-}
 .mainpage {
 	display: grid;
     grid-template-columns: 320px 3fr 4fr;
