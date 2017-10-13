@@ -36,7 +36,7 @@ export default class Battlefield extends React.PureComponent {
 			let x = i % this.size;
 			let y = Math.floor(i / this.size);
 			this.field.push({x: x, y: y, t: this.type.FREE});
-			this.getCell(x, y).setState({player: this.type.FREE});
+			this.getCell(x, y).setState({player: this.type.FREE, prevCell: null, nextCell: null});
 		}
 		this.props.setInfo("", "", false, "#39C2D7");
 		if (players.length > 0) {
@@ -153,8 +153,10 @@ export default class Battlefield extends React.PureComponent {
 					this.snakes[i].push({x: step.x, y: step.y});
 					let cell = this.getCell(step.x, step.y);
 					let rotate = this.getRotate(step, head);
-					cell.setState({player: i, head: true, rotate: rotate});
-					oldHead.setState({player: i, head: false});
+					cell.setState({player: i, head: true, rotate: rotate, prevCell: head});
+					let tail = this.snakes[i][0];
+					this.getCell(tail.x, tail.y).setState({prevCell: null});
+					oldHead.setState({head: false, nextCell: step});
 					let newTime = performance.now() - time;
 					times[i] = newTime;
 					this.game.steps.push({p: i, x: step.x, y: step.y, t: newTime.toFixed(3)});
@@ -238,8 +240,10 @@ export default class Battlefield extends React.PureComponent {
 				this.snakes[step.p].push({x: step.x, y: step.y});
 				let cell = this.getCell(step.x, step.y);
 				let rotate = this.getRotate(step, head);
-				cell.setState({player: step.p, head: true, rotate: rotate});
-				oldHead.setState({player: step.p, head: false});
+				cell.setState({player: step.p, head: true, rotate: rotate, prevCell: head});
+				let tail = this.snakes[step.p][0];
+				this.getCell(tail.x, tail.y).setState({prevCell: null});
+				oldHead.setState({head: false, nextCell: step});
 			}
 		} catch (ex) {
 			this.props.stopGame(ex.message);
@@ -386,6 +390,7 @@ export default class Battlefield extends React.PureComponent {
 														 size={this.size}
 														 ref={"cell" + tile % this.size + "x" + Math.floor(tile / this.size)}
 														 getColor={this.getColor}
+														 borders={this.props.borders} 
 														 />
 									))}
 				</div>

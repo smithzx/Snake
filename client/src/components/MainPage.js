@@ -20,6 +20,7 @@ export default class MainPage extends React.PureComponent {
 			text2: "",
 			color: "#39C2D7",
 			speed: 950,
+			borders: false,
 			replay: {},
 			fontSize: 24,
 			weight: window.localStorage && parseFloat(localStorage.getItem("weight")) || 3
@@ -31,6 +32,7 @@ export default class MainPage extends React.PureComponent {
 		this.stopGame = this.stopGame.bind(this);
 		this.selectPlayer = this.selectPlayer.bind(this);
 		this.changeSpeed = this.changeSpeed.bind(this);
+		this.showBorders = this.showBorders.bind(this);
 		this.setInfo = this.setInfo.bind(this);
 		this.onIncrement = this.onIncrement.bind(this);
 		this.onDecrement = this.onDecrement.bind(this);
@@ -101,6 +103,10 @@ export default class MainPage extends React.PureComponent {
 		this.setState({speed: event.nativeEvent.target.value});
 	}
 
+	showBorders() {
+		this.setState(({borders}) => ({borders: !borders}));
+	}
+
 	setInfo(info, text2, isAdd, color) {
 		if (isAdd) {
 			this.setState(({info: prevInfo, text2: prevText2}) => ({
@@ -144,10 +150,10 @@ export default class MainPage extends React.PureComponent {
 					<FormUpload/>
 					<Example/>
 					<SnakesList players={this.state.players} selectPlayer={this.selectPlayer} disabled={this.state.inplay}/>
-					<StartGame speed={this.state.speed} disabled={this.state.inplay}
+					<StartGame speed={this.state.speed} disabled={this.state.inplay} borders={this.state.borders} showBorders={this.showBorders}
 							   changeSpeed={this.changeSpeed} startGame={this.startGame} stopGame={this.stopGame}/>
 					<ReplaysList replayGame={this.replayGame}/>
-					<Battlefield ref="battlefield" addResult={this.addResult} setInfo={this.setInfo}
+					<Battlefield ref="battlefield" addResult={this.addResult} setInfo={this.setInfo} borders={this.state.borders} 
 								 players={this.state.players} speed={1000 - this.state.speed} replay={this.state.replay}
 								 stopGame={this.stopGame} inplay={this.state.inplay} onFieldClick={this.onFieldClick}/>
 					<Results results={this.state.results}/>

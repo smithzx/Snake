@@ -23,8 +23,10 @@ export default class BattlefieldCell extends React.PureComponent {
 	}
 
 	componentWillUpdate(nextProps, nextState) {
-		this.bg.HEAD = `url(../images/head.png) 0% 0% / 100% no-repeat ${nextProps.getColor(nextState.player)}`;
-		this.bg.TAIL = nextProps.getColor(nextState.player);
+		if (nextState.player > -1) {
+			this.bg.HEAD = `url(../images/head.png) 0% 0% / 100% no-repeat ${nextProps.getColor(nextState.player)}`;
+			this.bg.TAIL = nextProps.getColor(nextState.player);
+		}
 	}
 
 	getStylesCell() {
@@ -51,13 +53,28 @@ export default class BattlefieldCell extends React.PureComponent {
 	}
 
 	getStylesContainer() {
+		let x = this.props.count % this.props.size;
+		let y = Math.floor(this.props.count / this.props.size);
+		let borderTop = this.props.borders && (this.state.player > -1
+					&& !((this.state.prevCell && (y - this.state.prevCell.y === 1 || this.state.prevCell.y - y === this.props.size - 1))
+					|| (this.state.nextCell && (y - this.state.nextCell.y === 1 || this.state.nextCell.y - y === this.props.size - 1))));
+		let borderRight = this.props.borders && (this.state.player > -1
+					&& !((this.state.prevCell && (this.state.prevCell.x - x === 1 || x - this.state.prevCell.x === this.props.size - 1))
+					|| (this.state.nextCell && (this.state.nextCell.x - x === 1 || x - this.state.nextCell.x === this.props.size - 1))));
+		let borderBottom = this.props.borders && (this.state.player > -1
+					&& !((this.state.prevCell && (this.state.prevCell.y - y === 1 || y - this.state.prevCell.y === this.props.size - 1))
+					|| (this.state.nextCell && (this.state.nextCell.y - y === 1 || y - this.state.nextCell.y === this.props.size - 1))));
+		let borderLeft = this.props.borders && (this.state.player > -1
+					&& !((this.state.prevCell && (x - this.state.prevCell.x === 1 || this.state.prevCell.x - x === this.props.size - 1))
+					|| (this.state.nextCell && (x - this.state.nextCell.x === 1 || this.state.nextCell.x - x === this.props.size - 1))));
 		return {
 			gridColumn: this.props.count % this.props.size + 1,
-			gridSize: this.props.count,
-			borderTop: this.props.count < this.props.size ? "2px #39C2D7 solid" : "none",
-			borderRight: this.props.count % this.props.size === this.props.size - 1 ? "2px #39C2D7 solid" : "1px #999999 solid",
-			borderBottom: this.props.count > (this.props.size - 1) * this.props.size - 1 ? "2px #39C2D7 solid" : "1px #999999 solid",
-			borderLeft: this.props.count % this.props.size === 0 ? "2px #39C2D7 solid" : "none",
+			borderTop: borderTop ? "1px black solid" : this.props.count < this.props.size ? "2px #39C2D7 solid" : "none",
+			borderRight: borderRight ? "1px black solid" : this.props.count % this.props.size === this.props.size - 1 ? "2px #39C2D7 solid" : "1px #999999 solid",
+			borderBottom: borderBottom ? "1px black solid" : this.props.count > (this.props.size - 1) * this.props.size - 1 ? "2px #39C2D7 solid" : "1px #999999 solid",
+			borderLeft: borderLeft ? "1px black solid" : this.props.count % this.props.size === 0 ? "2px #39C2D7 solid" : "none",
+			marginTop: borderTop ? "-1px" : 0,
+			marginLeft: borderLeft ? "-1px" : 0
 		};
 	}
 
