@@ -115,7 +115,7 @@ export default class Battlefield extends React.PureComponent {
 			free[head].t = i;
 			let cell = this.getCell(free[head].x, free[head].y);
 			this.game.heads.push({p: i, x: free[head].x, y: free[head].y});
-			cell.setState({player: i, head: true});
+			cell.setState({player: i});
 		}
 	}
 
@@ -153,10 +153,10 @@ export default class Battlefield extends React.PureComponent {
 					this.snakes[i].push({x: step.x, y: step.y});
 					let cell = this.getCell(step.x, step.y);
 					let rotate = this.getRotate(step, head);
-					cell.setState({player: i, head: true, rotate: rotate, prevCell: head});
+					cell.setState({player: i, rotate: rotate, prevCell: head, nextCell: null});
 					let tail = this.snakes[i][0];
 					this.getCell(tail.x, tail.y).setState({prevCell: null});
-					oldHead.setState({head: false, nextCell: step});
+					oldHead.setState({nextCell: step});
 					let newTime = performance.now() - time;
 					times[i] = newTime;
 					this.game.steps.push({p: i, x: step.x, y: step.y, t: newTime.toFixed(3)});
@@ -240,10 +240,10 @@ export default class Battlefield extends React.PureComponent {
 				this.snakes[step.p].push({x: step.x, y: step.y});
 				let cell = this.getCell(step.x, step.y);
 				let rotate = this.getRotate(step, head);
-				cell.setState({player: step.p, head: true, rotate: rotate, prevCell: head});
+				cell.setState({player: step.p, rotate: rotate, prevCell: head, nextCell: null});
 				let tail = this.snakes[step.p][0];
 				this.getCell(tail.x, tail.y).setState({prevCell: null});
-				oldHead.setState({head: false, nextCell: step});
+				oldHead.setState({nextCell: step});
 			}
 		} catch (ex) {
 			this.props.stopGame(ex.message);

@@ -10,7 +10,6 @@ export default class BattlefieldCell extends React.PureComponent {
 			count: this.props.count,
 			size: this.props.size,
 			player: -1,
-			head: false,
 			rotate: 0
 		};
 		this.bg = {};
@@ -40,8 +39,8 @@ export default class BattlefieldCell extends React.PureComponent {
 				bg = this.bg.FREE
 				break;
 			default:
-				bg = this.state.head ? this.bg.HEAD : this.bg.TAIL
-				tr = this.state.head ? `rotate(${this.state.rotate || 0}deg)` : `rotate(0deg)`;
+				bg = this.state.nextCell ? this.bg.TAIL : this.bg.HEAD
+				tr = this.state.nextCell ? `rotate(0deg)` : `rotate(${this.state.rotate || 0}deg)`;
 				break;
 		}
 		return {

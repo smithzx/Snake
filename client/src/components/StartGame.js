@@ -6,7 +6,7 @@ export default function StartGame({speed, disabled, borders, showBorders, change
 			<div className="startgame">
 				<span style={{verticalAlign: "super"}}>Speed:</span>
 				<input type="range" className="speed" min="0" max="1000" value={speed} onChange={changeSpeed}/>
-				<input type="checkbox" className="showSpeed" value={borders} onChange={showBorders} title="Show borders"/>
+				<input type="checkbox" className="borders" value={borders} onChange={showBorders} title="Show borders"/>
 				<br/>
 				<input type="button" className="start" value="Start Game" onClick={startGame} disabled={disabled}/>
 				&nbsp;
